@@ -221,7 +221,7 @@ sml_flights %>%
 # Use case_when if the new variable is based on certain conditions
 flights %>%
   transmute(dep_time, 
-            hour = dep_time %/% 100, 
+            hour = dep_time %/% 100,          
             minute = dep_time %% 100, 
             time_category = case_when(
               hour <= 8 ~ "early", 
@@ -288,7 +288,7 @@ sml_flights %>%
   group_by(year, month, day) %>%
   filter(rank(desc(arr_delay)) < 10)
 
-# Groups bigger than threashold
+# Groups bigger than threshold
 flights %>%
   group_by(dest) %>%
   filter(n() > 365) %>%
