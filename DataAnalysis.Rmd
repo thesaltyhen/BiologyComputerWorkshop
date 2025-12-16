@@ -961,7 +961,7 @@ tres_results <- lm(treasure_g ~ weight_g + sex + as.factor(month) + site,
 # Look at results
 summary(tres_results)
 
-# Lets make a table that we can save of our beta estiamtes
+# Lets make a table that we can save of our beta estimates
 (beta_coefs <- as.data.frame(
   summary(tres_results)$coefficients) %>%
   rownames_to_column("Parameter"))
