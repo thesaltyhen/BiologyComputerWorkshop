@@ -173,10 +173,10 @@ treasure_datum <- treasure %>%
   mutate(month = month(date), 
          year = year(date))
 
-glimpse(cap_treasure)
+glimpse(treasure_datum)
 
 # Check for NAs introduced by the join (e.g., ids in treasure not in capture)
-summary(cap_treasure)
+summary(treasure_datum)
 
 # Create yearly treasure summaries -------------------------------------------
 # I want mean and total treasure per id-year (will be useful for recruitment analysis).
