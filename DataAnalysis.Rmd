@@ -525,11 +525,15 @@ Use the code block below to work:
 
 ```{r import_dat}
 # 1. Use read_csv() to import the 3 data files
-
+xcapture <- read_csv("Data/nifflers_capture.csv")
+xrecruitment <- read_csv("Data/nifflers_recruitment.csv")
+xtreasure <- read_csv("Data/nifflers_treasure.csv")
 
 
 # 2. Use glimpse() to inspect each data frame
-
+glimpse(xcapture)
+glimpse(xrecruitment)
+glimpse(xtreasure)
 ```
 
 Our raw data contains:
@@ -563,10 +567,32 @@ Use the code block below to complete each step.
 
 ```{r clean}
 # Clean capture data here
-
+# 1. Convert `capture_year` into a numeric variable.
+# non-issue
+# 2. Fix messy/inconsistent `site` values.  
+unique(xcapture$site)
+xcapture <- xcapture %>%
+  mutate(site = case_when(
+    site == "gringotts" ~ "Gringotts",
+    site == "Gringotts Bank" ~ "Gringotts",
+    TRUE ~ site))
+# 3. Convert `sex` into a factor.
+xcapture$sex <- as.factor(as.character(xcapture$sex))
+# 4. Examine missing values in `age` and `weight_g`.  
+summary(xcapture)
+xcapture %>% filter(is.na(age))
+xcapture %>% filter(is.na(weight_g))
+# 5. Identify and handle extreme outliers (your choice how).
 
 # Clean treasure data here
-
+unique(xtreasure$site)
+xtreasure <- xtreasure %>%
+  mutate(site = case_when (
+    site == "ForbiddenForest" ~ "Forbidden Forest",
+    TRUE ~ site
+  ))
+summary(xtreasure$treasure_g)
+xtreasure %>% filter(is.na(treasure_g))  
 
 # Clean recruitment data here
 
@@ -687,6 +713,7 @@ We’ll work through this step-by-step so you can see how each layer adds
 information, starting with our treasure data.
 
 ```{r ploting1}
+source("Scripts/niffler_data_cleaning.R")
 # Specify the data argument
 ggplot(data = treasure_datum)
 
@@ -821,7 +848,7 @@ p +
   scale_color_brewer(palette = "Dark2")
 
 # Last thing to change is the legend, it is not very clear and in a weird spot. 
-# We will change the names and labels with scale, and change the appearnace with 
+# We will change the names and labels with scale, and change the appearance with 
 # theme
 p + 
   theme_classic() +
@@ -847,10 +874,10 @@ p +
   scale_y_continuous(name = "Weekly treasure haul (g)", 
                      breaks = seq(0, 20000, 2000), limits = c(0, 12000)) + 
   scale_color_brewer(name = "", labels = c("Female", "Male"), palette = "Dark2") + 
-  theme(legend.position = "top", 
+  theme(legend.position = c(0.93, 0.1), 
         axis.title = element_text(size = 14), 
         axis.text = element_text(size = 12), 
-        strip.text = element_text(size = 16), 
+        strip.text = element_text(size = 14), 
         legend.text = element_text(size = 12))
 
 ```
